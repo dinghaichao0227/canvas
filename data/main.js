@@ -4,8 +4,17 @@ window.addEventListener('load', function () {
 })
 
 // 获取 dialog
-var dialog = document.getElementById('dialog')
+var dialog = document.getElementById('dialog');
 dialog.style.display = 'none';
+
+// 获取box-x的value
+var boxX = document.getElementById('box-x');
+
+// 获取box-y的value
+var boxY = document.getElementById('box-y');
+
+// 获取确定按钮
+var btn = document.getElementById('btn');
 
 /* 获取 Canvas 元素和上下文 */
 var canvas = document.getElementById('canvas');
@@ -144,6 +153,35 @@ function drawCrosshair(event) {
     ctxs.fillText(`(${mouseX},${mouseY})`, mouseX + 10, mouseY - 10);
   }
 }
+
+/*
+确定按钮
+box-x 的value
+box-y 的value
+*/
+var box_x = 0;
+var box_y = 0;
+
+boxX.addEventListener('change', function (e) {
+  box_x = e.target.value
+})
+boxY.addEventListener('change', function (e) {
+  box_y = e.target.value
+})
+
+btn.addEventListener('click', function (e) {
+  dialog.style.display = 'none';
+  if (box_x !== 0 && box_y !== 0) {
+    data.push({
+      x: box_x,
+      y: box_y,
+    })
+    console.log(data, 99);
+    drawScatterPlot()
+  }
+  boxX.value = ''
+  boxY.value = ''
+})
 
 // 鼠标右键
 canvas.addEventListener('contextmenu', function (e) {
