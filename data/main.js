@@ -1,5 +1,7 @@
 // @ts-nocheck
 window.addEventListener('load', function () {
+
+  ctx.clearRect(0 - dtSx, 0 - dtSy, canvas.width, canvas.height); // 清空画布
   drawCrosshair(event)
 })
 
@@ -26,8 +28,8 @@ var ctxs = can.getContext('2d');
 
 // 设置数据
 var data = [
-  { x: 200, y: 145 },
-  { x: 150, y: 180 },
+  { x: 250, y: 145 },
+  { x: 250, y: 180 },
 ];
 
 // 定义缩放比例和缩放范围
@@ -39,6 +41,7 @@ var pointRadius = 10; // 点的半径
 // 绘制散点图
 function drawScatterPlot() {
   ctx.clearRect(0 - dtSx, 0 - dtSy, canvas.width, canvas.height); // 清空画布
+  envelopAll()
 
   for (var i = 0; i < data.length; i++) {
     var point = data[i];
@@ -55,12 +58,11 @@ function drawScatterPlot() {
 
 // 包络线
 var envelop = [
-  { x: 30, y: 50 },
-  { x: 20, y: 60 },
-  { x: 50, y: 70 },
-  { x: 80, y: 90 },
-  { x: 100, y: 120 },
-  { x: 130, y: 170 },
+  { x: 155, y: 140 },
+  { x: 100, y: 160 },
+  { x: 160, y: 170 },
+  { x: 120, y: 130 },
+  { x: 130, y: 185 },
 ]
 
 // 将所以的点都连接起来
@@ -74,6 +76,8 @@ function envelopAll() {
   ctx.strokeStyle = 'blue';
   ctx.lineWidth = 2;
   ctx.stroke()
+  ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
+
 }
 
 // 添加鼠标滚轮事件
@@ -86,8 +90,11 @@ canvas.addEventListener('wheel', function (event) {
   var zoomFactor = 0.1; // 缩放因子，可以根据需要调整
   if (delta < 0) {
     scale += zoomFactor; // 放大
+    ctx.clearRect(0 - dtSx, 0 - dtSy, canvas.width, canvas.height);
+
   } else {
     scale -= zoomFactor; // 缩小
+    ctx.clearRect(0 + dtSx, 0 + dtSy, canvas.width, canvas.height);
   }
 
   // 限制缩放范围
@@ -97,15 +104,16 @@ canvas.addEventListener('wheel', function (event) {
   var canvasCenterX = canvas.width / 2;
   var canvasCenterY = canvas.height / 2;
 
+
   // 计算缩放后的偏移量
   var newOffsetX = canvasCenterX - canvasCenterX * scale;
   var newOffsetY = canvasCenterY - canvasCenterY * scale;
+
 
   offsetX = newOffsetX
   offsetY = newOffsetY
 
   // 更新画布的变换矩阵
-  ctx.clearRect(0 + dtSx, 0 + dtSy, canvas.width, canvas.height);
   ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
   // 绘制您的图形
   drawScatterPlot();
@@ -126,9 +134,8 @@ function drawCrosshair(event) {
   var mouseY = event.clientY - rect.top;
 
   ctxs.clearRect(0, 0, canvas.width, canvas.height); // 清空画布
-  drawScatterPlot()
-  envelopAll()
 
+  drawScatterPlot()
   // 绘制横线
   ctxs.beginPath();
   ctxs.setLineDash(crosshairDash);
@@ -172,15 +179,24 @@ boxY.addEventListener('change', function (e) {
 btn.addEventListener('click', function (e) {
   dialog.style.display = 'none';
   if (box_x !== 0 && box_y !== 0) {
-    data.push({
-      x: box_x,
-      y: box_y,
-    })
-    console.log(data, 99);
+    if (dataItem !== null) {
+      data.map(item => {
+        if (item === dataItem) {
+          item.x = box_x
+          item.y = box_y
+        }
+      })
+    } else {
+      data.push({
+        x: box_x,
+        y: box_y,
+      })
+    }
     drawScatterPlot()
   }
   boxX.value = ''
   boxY.value = ''
+  dataItem = null
 })
 
 // 鼠标右键
@@ -189,6 +205,13 @@ canvas.addEventListener('contextmenu', function (e) {
   dialog.style.display = 'block';
   dialog.style.left = e.clientX + 'px';
   dialog.style.top = e.clientY + 'px';
+  data.map(item => {
+    if (Math.abs(item.x - e.offsetX + dtSx) <= pointRadius * 2 && Math.abs(item.y - e.offsetY + dtSy) <= pointRadius * 2
+    ) {
+      dataItem = item;
+      isDialog = true;
+    }
+  })
 })
 
 // 鼠标按下
@@ -268,6 +291,6 @@ canvas.addEventListener('mouseleave', function (e) {
 /* 监听鼠标离开事件，清空画布 */
 canvas.addEventListener('mouseout', function (e) {
   drawScatterPlot();
-  envelopAll();
+  // envelopAll();
 
 });
