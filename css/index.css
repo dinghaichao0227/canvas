@@ -1,0 +1,27 @@
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  background-color: #d7d7d7;
+  border-radius: 5px;
+
+  .box-x {
+    display: flex;
+    margin: 10px;
+  }
+
+  .box-y {
+    display: flex;
+    margin: 10px;
+  }
+}
+
+#btn {
+  margin-left: 150px;
+  margin-bottom: 5px;
+}
