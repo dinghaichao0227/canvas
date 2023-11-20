@@ -42,6 +42,8 @@ var pointRadius = 10; // 点的半径
 function drawScatterPlot() {
   ctx.clearRect(0 - dtSx, 0 - dtSy, canvas.width, canvas.height); // 清空画布
   envelopAll()
+  // 在 Canvas 中绘制五角星
+  drawStar(300, 100, 50, 5, 20, 'gold', 'black');
 
   for (var i = 0; i < data.length; i++) {
     var point = data[i];
@@ -55,6 +57,39 @@ function drawScatterPlot() {
     ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
   }
 }
+
+
+// 绘制五角星的函数
+function drawStar(x, y, radius, spikes, innerRadius, fillStyle, strokeStyle) {
+  // 保存画布状态
+  ctx.save();
+
+  // 移动到起始点
+  ctx.beginPath();
+  ctx.translate(x, y);
+  ctx.moveTo(0, 0 - radius);
+
+  // 绘制五角星的路径
+  for (var i = 0; i < spikes; i++) {
+    ctx.rotate(Math.PI / spikes);
+    ctx.lineTo(0, 0 - innerRadius);
+    ctx.rotate(Math.PI / spikes);
+    ctx.lineTo(0, 0 - radius);
+  }
+
+  // 设置填充样式和描边样式
+  ctx.fillStyle = fillStyle;
+  ctx.strokeStyle = strokeStyle;
+
+  // 填充和描边五角星
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  // 恢复画布状态
+  ctx.restore();
+}
+
 
 // 包络线
 var envelop = [
@@ -134,7 +169,8 @@ function drawCrosshair(event) {
   var mouseY = event.clientY - rect.top;
 
   ctxs.clearRect(0, 0, canvas.width, canvas.height); // 清空画布
-
+  // 在 Canvas 中绘制五角星
+  drawStar(100, 100, 50, 5, 20, 'gold', 'black');
   drawScatterPlot()
   // 绘制横线
   ctxs.beginPath();
