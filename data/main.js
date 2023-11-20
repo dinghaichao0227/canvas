@@ -91,7 +91,7 @@ function drawStar(x, y, radius, spikes, innerRadius, fillStyle, strokeStyle) {
 }
 
 
-// 包络线
+// 五角星线
 var envelop = [
   { x: 155, y: 140 },
   { x: 100, y: 160 },
