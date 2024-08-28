@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    画板
+  </title>
+  <link rel="stylesheet" href="./css/canvas.css">
+
+</head>
+
+<body>
+  <div id="draw">
+    <div id="tools">
+      <h2>工具栏</h2>
+      <div id="header">
+        <input id="color" type="color" class="colors" value="#000000">画笔颜色</input>
+        <input id="bgc" type="color" class="colors" value="#ffffff">画板颜色</input>
+        <input id="lineWidthSmall" class="ranges" type="range" value="0.01" min="0.002" max="0.02"
+          step="0.001">画笔微调~<span id="text1"></span></input>
+        <input id="lineWidthBig" class="ranges" type="range" value="2" min="0" max="10" step="0.01">画笔粗调~<span
+          id="text2"></span></input>
+        <input id="shadowBlur" class="ranges" type="range" value="1" min="0" max="10" step="0.01">画笔虚化~<span
+          id="text3"></span></input>
+      </div>
+      <div id="footer">
+        <button id="pen" class="btn selected">画笔</button>
+        <button id="line" class="btn">直线</button>
+        <button id="rect" class="btn">矩形</button>
+        <button id="cir" class="btn">圆形</button>
+        <button id="eraser" class="btn">橡皮</button>
+        <button id="clear" class="btn">清空</button>
+        <button id="back" class="btn">撤销</button>
+        <button id="restore" class="btn">恢复</button>
+      </div>
+      <button id="save">保存</button>
+    </div>
+    <div class="context">
+      <canvas id="canvas" width="400" height="400" style="border: 1px  solid;"></canvas>
+      <table class="table">
+        <thead>
+          <tr>
+            <!-- <th>序号</th> -->
+            <th>id</th>
+            <th>名称</th>
+            <th>图标</th>
+            <th>匹配度</th>
+            <th>链接</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./js/canvas.js"></script>
+</body>
+
+</html>
